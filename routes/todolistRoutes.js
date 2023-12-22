@@ -52,6 +52,29 @@ router.post(
   })
 );
 
+router.put(
+  "/:todoId",
+  asyncHandler(async (req, res) => {
+    const { todo, completed, priority, dateToComplete } = req.body;
+
+    const todoItem = await Todo.findById(req.params.todoId);
+
+    if (todoItem) {
+      todoItem.todo = todo;
+      todoItem.completed = completed;
+      todoItem.priority = priority;
+      todoItem.dateToComplete = dateToComplete;
+
+      const updatedCompleted = await todoItem.save();
+      res.json(updatedCompleted);
+      console.log(res.json);
+    } else {
+      res.status(404);
+      throw new Error("Resources Not Found");
+    }
+  })
+);
+
 router.delete(
   "/:todoId",
   asyncHandler(async (req, res) => {
